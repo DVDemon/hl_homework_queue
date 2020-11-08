@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>Highload Homework</title>
+ <style>
+     #login
+     {
+         border: 2px solid darkgrey;
+         border-radius: 5px;
+         padding:15px;
+         margin: 100px auto;
+         width:300px;
+         height:300px;
+     }
+  </style>
+ <script>
+     function login(){
+        document.getElementById("message").innerHTML="";
+ 
+        var xhr = new XMLHttpRequest();
+        var name = document.getElementById("username").value;
+        var password = document.getElementById("pass").value;
+        xhr.open("GET", "login?login=" + name+"&password="+password, true);
+        xhr.send();
+        
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4 && xhr.status== 200){
+                var jsonData = xhr.responseText;
+                var jsObject = JSON.parse(jsonData);
+                    if(jsObject.result==true){
+                        window.location="main.html?session_id="+jsObject.session_id;
+                    } else {
+                        document.getElementById("message").innerHTML="<br><b>Invalid name or password</b><br>";
+                    }
+                }
+            }
+     };
+ </script>
+ </head>
+ <body> 
+    <div id="login">
+        <h2>Highload Homework</h2>
+        <label for="username">Username:</label><br/>
+        <input type="text" id="username" name="username">
+        <br/><br/>
+        <label for="pass">Password (8 characters minimum):</label><br/>
+        <input type="password" id="pass" name="password"
+            minlength="8" required>
+        <br/><br/>
+        <div id="message"></div>
+        <br/><br/>
+        <input type="submit" value="Sign in" onclick="login();">
+        <input type="submit" value="Sign up" onclick="window.location='signup.html';">
+    </div>
+ </body>
+</html>

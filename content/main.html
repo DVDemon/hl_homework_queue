@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dummy Social Network</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        #main {
+            border: 2px solid darkgrey;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 100px auto;
+            width: 300px;
+            height: 400px;
+            position: fixed;
+            left: 50px;
+            top: 30px;
+        }
+
+        #friends {
+            border: 2px solid darkgrey;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 100px auto;
+            width: 300px;
+            height: 400px;
+            left: 400px;
+            top: 30px;
+            position: fixed;
+        }
+
+        #suggestion-list {
+            list-style-type: none;
+            margin-top: 5px;
+            margin-left: -40px;
+            width: 200px;
+        }
+
+        #suggestion-list li {
+            background: lightgrey;
+            border-bottom: 1px solid steelblue;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        #suggestion-list li:hover {
+            cursor: pointer;
+            background: orange;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id')
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "person?session_id=" + session_id, true);
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var jsonData = xhr.responseText;
+                    var jsObject = JSON.parse(jsonData);
+                    document.getElementById("login").value = jsObject.login;
+                    document.getElementById("first_name").value = jsObject.first_name;
+                    document.getElementById("last_name").value = jsObject.last_name;
+                    document.getElementById("age").value = jsObject.age;
+                    document.getElementById("hobby").value = jsObject.hobby;
+                    document.getElementById("city").value = jsObject.city;
+
+                    var xhr2 = new XMLHttpRequest();
+                    xhr2.open("GET", "friends?session_id=" + session_id, true);
+                    xhr2.send();
+
+                    xhr2.onreadystatechange = function () {
+                        if (xhr2.readyState == 4 && xhr2.status == 200) {
+                            var jsonData = xhr2.responseText;
+                            var jsObject = JSON.parse(jsonData);
+                            var length = jsObject.length;
+                            var text = "<ul id='friends-list'>";
+                            for (var i = 0; i < length; i++)
+                                text += "<li>" + jsObject[i] + "  <a href=\"#\" onclick=\"remove_friend('" + jsObject[i] + "');\">remove</a></li>";
+                        }
+                        text += "</ul><br/><br/>"
+                        document.getElementById("friends_list").innerHTML = text;
+                    }
+
+                }
+            }
+
+        };
+
+        function autocomplete_login() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            var filter = encodeURIComponent(document.getElementById("friend_input").value);
+
+            var xhr3 = new XMLHttpRequest();
+
+            xhr3.open("GET", "friends?session_id=" + session_id + "&filter=" + filter, true);
+            xhr3.send();
+
+            xhr3.onreadystatechange = function () {
+                if (xhr3.readyState == 4 && xhr3.status == 200) {
+                    var jsonData = xhr3.responseText;
+                    var jsObject = JSON.parse(jsonData);
+                    var length = jsObject.length;
+                    var text = "<ul id='suggestion-list'>";
+                    for (var i = 0; i < length; i++)
+                        text += "<li onclick=\"display_name('" + jsObject[i] + "');\">" + jsObject[i] + "</li>";
+                }
+                text += "</ul>"
+                document.getElementById("suggest_list").innerHTML = text;
+            }
+        };
+
+        function display_name(name) {
+            document.getElementById("friend_input").value = name;
+            document.getElementById("suggest_list").innerHTML = "";
+        }
+
+        function add_friend() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            var friend_name = document.getElementById("friend_input").value;
+            var xhr4 = new XMLHttpRequest();
+
+            xhr4.open("GET", "friends?session_id=" + session_id + "&add=" + friend_name, true);
+            xhr4.send();
+
+            xhr4.onreadystatechange = function () {
+                if (xhr4.readyState == 4 && xhr4.status == 200) {
+                    window.onload();
+
+                }
+            }
+        };
+
+        function remove_friend(friend_name) {
+
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            var xhr4 = new XMLHttpRequest();
+
+            xhr4.open("GET", "friends?session_id=" + session_id + "&delete=" + friend_name, true);
+            xhr4.send();
+
+            xhr4.onreadystatechange = function () {
+                if (xhr4.readyState == 4 && xhr4.status == 200) {
+                    window.onload();
+                }
+            }
+        };
+
+        function search_by_name() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            window.location = "search.html?session_id=" + session_id;
+        }
+    </script>
+</head>
+
+<body>
+    <div id="main">
+        <h2>About</h2>
+        <label for="login">Username:</label><br />
+        <input type="text" id="login" name="login">
+        <br /><br />
+        <label for="first_name">First Name:</label><br />
+        <input type="text" id="first_name" name="first_name">
+        <br /><br />
+        <label for="last_name">Last Name:</label><br />
+        <input type="text" id="last_name" name="last_name">
+        <br /><br />
+        <label for="age">Age:</label><br />
+        <input type="text" id="age" name="age">
+        <br /><br />
+        <label for="hobby">Hobby:</label><br />
+        <input type="text" id="hobby" name="hobby">
+        <br /><br />
+        <label for="city">City:</label><br />
+        <input type="text" id="city" name="city">
+    </div>
+    <div id="friends">
+        <h2>Friends</h2>
+        <div id="friends_list"></div>
+        <input type="text" id="friend_input" name="friend_input" placeholder="user login.." autocomplete="off"
+            onkeyup="autocomplete_login();">
+        <input type="submit" value="Add" onclick="add_friend();">
+        <div id="suggest_list"></div>
+        <br />
+        <br />
+        <input type="submit" value="Search by name" onclick="search_by_name();">
+    </div>
+
+</body>
+
+</html>

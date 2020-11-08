@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>Dummy Social Network</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <style>
+
+    </style>
+ <script>
+     function search(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const session_id = urlParams.get('session_id'); 
+        var fn = encodeURIComponent(document.getElementById("first_name").value);
+        var ln = encodeURIComponent(document.getElementById("last_name").value);
+
+        var xhr3 = new XMLHttpRequest();
+
+
+        xhr3.open("GET", "search?session_id=" + session_id+"&first_name="+fn+"&last_name="+ln, true);
+        xhr3.send();
+
+        xhr3.onreadystatechange = function(){
+                    if (xhr3.readyState == 4 && xhr3.status== 200){
+                        var jsonData = xhr3.responseText;
+                        var jsObject = JSON.parse(jsonData);
+                        var length = jsObject.length;
+                        var text = "<ul id='result-list'>";
+                        for(var i=0;i<length;i++)
+                         text += "<li onclick=\"add_friend('"+jsObject[i].login+"');\">"+jsObject[i].first_name+" "+jsObject[i].last_name+"</li>";
+                        }
+                        text += "</ul>"
+                        document.getElementById("result").innerHTML = text;
+                    }
+     };
+
+     function add_friend(login){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const session_id = urlParams.get('session_id'); 
+        var xhr4 = new XMLHttpRequest();
+
+        xhr4.open("GET", "friends?session_id=" + session_id+"&add="+login, true);
+        xhr4.send();
+
+        xhr4.onreadystatechange = function(){
+                    if (xhr4.readyState == 4 && xhr4.status== 200){
+                        alert("login:" + login +" added");
+                        
+                    }
+                }
+     }
+ </script>
+</head>
+ <body> 
+  <div id="search">
+    <h2>Search</h2> 
+    <input type="text" id="first_name" name="first_name" placeholder="first name mask" autocomplete="off" >
+    <input type="text" id="last_name" name="last_name" placeholder="last name mask" autocomplete="off" >
+    <br/>
+    <br/>
+    <input type="submit" value="Search" onclick="search();">
+    <div id="result"></div>
+  </div>
+ </body>
+</html>

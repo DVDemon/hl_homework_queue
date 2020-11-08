@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dummy Social Network</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+
+    </style>
+    <script>
+
+        window.onload = function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id')
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "friends?session_id=" + session_id, true);
+            xhr2.send();
+
+            xhr2.onreadystatechange = function () {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    var jsonData = xhr2.responseText;
+                    var jsObject = JSON.parse(jsonData);
+                    var length = jsObject.length;
+                    var text = "<ul id='friends-list'>";
+                    for (var i = 0; i < length; i++)
+                        text += "<li>" + jsObject[i] + "  <a href=\"#\" onclick=\"load_chat('" + jsObject[i] + "');\">chat</a></li>";
+                }
+                text += "</ul><br/><br/>"
+                document.getElementById("friends_list").innerHTML = text;
+            }
+        }
+        function load_chat(name) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id')
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "chat?session_id=" + session_id + "&filter=" + name, true);
+            xhr2.send();
+
+            xhr2.onreadystatechange = function () {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    var jsonData = xhr2.responseText;
+                    var jsObject = JSON.parse(jsonData);
+                    var length = jsObject.length;
+                    var text = "<ul id='chat-list'>";
+                    for (var i = 0; i < length; i++)
+                        text += "<li>" + jsObject[i].message + "</li>";
+                }
+                text += "</ul><br/><br/>"
+                document.getElementById("chat_list").innerHTML = text;
+            }
+        };
+
+
+    </script>
+</head>
+
+<body>
+    <div id="friends">
+        <h2>Friends</h2>
+        <div id="friends_list"></div>
+    </div>
+    <div id="Chat">
+        <h2>Chat</h2>
+        <input type="text" id="message" name="message" placeholder="Enter message" autocomplete="off" >
+        <input type="submit" value="send" onclick="send_message();">
+        <br/>
+        <hr/>
+        <br/>
+        <div id="chat_list"></div>
+    </div>
+</body>
+
+</html>
