@@ -12,6 +12,7 @@
 #include <csignal>
 #include <cstring>
 #include <exception>
+#include <memory>
 
 static volatile sig_atomic_t run = 1;
 
@@ -43,14 +44,20 @@ KafkaProducer::KafkaProducer()
 
 void KafkaProducer::send(long id, const std::string &login)
 {
-    RdKafka::Conf *conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
+    auto conf =std::unique_ptr<RdKafka::Conf>(RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL));
     std::string errstr;
 
-    if (conf->set("bootstrap.servers", brokers, errstr) != RdKafka::Conf::CONF_OK) 
-        throw std::logic_error(errstr.c_str());
+    if (conf->set("bootstrap.servers", brokers, errstr) != RdKafka::Conf::CONF_OK) throw std::logic_error(errstr.c_str());
     
     signal(SIGINT, sigterm);
     signal(SIGTERM, sigterm);
+
+    ExampleDeliveryReportCb ex_dr_cb;
+    if (conf->set("dr_cb", &ex_dr_cb, errstr) != RdKafka::Conf::CONF_OK) throw std::logic_error(errstr.c_str());
+
+    auto producer = std::unique_ptr<RdKafka::Producer>(RdKafka::Producer::create(conf.get(), errstr));
+    if (!producer) throw std::logic_error(errstr.c_str());
+
 
     std::vector<database::Friends> friends = database::Friends::get_friends(login);
     for (auto f : friends)

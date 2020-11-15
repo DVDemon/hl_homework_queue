@@ -38,7 +38,7 @@ target_link_libraries(${WEBSERVICE_BINARY} PRIVATE
                              ${Poco_LIBRARIES}
                              "libmysqlclient.a"
                              ZLIB::ZLIB
-                             librdkafka)
+                             ${LibRDKafka_LIBRARIES})
 
 set_target_properties(${WEBSERVICE_BINARY} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${WEBSERVICE_BINARY} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
