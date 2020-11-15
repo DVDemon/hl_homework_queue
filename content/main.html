@@ -162,6 +162,14 @@
             const session_id = urlParams.get('session_id');
             window.location = "search.html?session_id=" + session_id;
         }
+
+
+        function chat() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            window.location = "chat.html?session_id=" + session_id;
+        }
     </script>
 </head>
 
@@ -196,6 +204,7 @@
         <br />
         <br />
         <input type="submit" value="Search by name" onclick="search_by_name();">
+        <input type="submit" value="Chat " onclick="chat();">
     </div>
 
 </body>

@@ -50,6 +50,7 @@ namespace database{
             public:
                 bool query(const std::string& query,callback_t callback,callback_row_t callback_row);
                 void execute(std::string& query);
+                long execute_and_get_id(std::string& query);
                 static Database_MySQL& get();
                 static std::string get_version();
                 void create_database(ConnectionType ct);

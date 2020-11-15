@@ -93,7 +93,7 @@ void database::Database_MySQL::execute(std::string &query)
     try
     {
         if (mysql_query(con._con, query.c_str()))
-            throw std::logic_error(query);
+            throw std::logic_error(mysql_error(con._con));
     }
     catch (...)
     {
@@ -102,6 +102,38 @@ void database::Database_MySQL::execute(std::string &query)
     }
 
     release(con);
+}
+
+long database::Database_MySQL::execute_and_get_id(std::string &query)
+{
+    long result_id {};
+    database::Connection con = acquire(ConnectionType::WRITE);
+
+    try
+    {
+        if (mysql_query(con._con, query.c_str()))
+            throw std::logic_error(mysql_error(con._con));
+
+        if (mysql_query(con._con, "SELECT LAST_INSERT_ID();"))
+            throw std::logic_error(query);
+
+        MYSQL_RES *result = mysql_store_result(con._con);
+        if (result == NULL)
+            throw std::logic_error(query);
+        MYSQL_ROW row = mysql_fetch_row(result);
+        result_id = atol(std::string(row[0]).c_str());
+        
+        mysql_free_result(result);
+    }
+    catch (...)
+    {
+        release(con);
+        throw;
+    }
+
+    release(con);
+
+    return result_id;
 }
 
 database::Database_MySQL::~Database_MySQL()

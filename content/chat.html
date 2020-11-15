@@ -5,10 +5,31 @@
     <title>Dummy Social Network</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
-
+    #friends_list {
+            border: 2px solid darkgrey;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 100px auto;
+            width: 300px;
+            height: 500px;
+            position: fixed;
+            left: 50px;
+            top: 0px;
+        }
+    #chat {
+            border: 0px solid darkgrey;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 100px auto;
+            width: 600px;
+            height: 600px;
+            position: fixed;
+            left: 400px;
+            top: 0px;
+        }
     </style>
     <script>
-
+        var current_name;
         window.onload = function () {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
@@ -35,9 +56,10 @@
             const urlParams = new URLSearchParams(queryString);
             const session_id = urlParams.get('session_id')
             var xhr2 = new XMLHttpRequest();
+            current_name = name;
+            document.getElementById("chat_caption").innerHTML = "Chat with "+current_name;
             xhr2.open("GET", "chat?session_id=" + session_id + "&filter=" + name, true);
             xhr2.send();
-
             xhr2.onreadystatechange = function () {
                 if (xhr2.readyState == 4 && xhr2.status == 200) {
                     var jsonData = xhr2.responseText;
@@ -45,24 +67,37 @@
                     var length = jsObject.length;
                     var text = "<ul id='chat-list'>";
                     for (var i = 0; i < length; i++)
-                        text += "<li>" + jsObject[i].message + "</li>";
+                        text += "<li><b>" + jsObject[i].source_login + "</b>: " + jsObject[i].time +"<br/>"+ jsObject[i].message + "<hr/></li>";
                 }
                 text += "</ul><br/><br/>"
                 document.getElementById("chat_list").innerHTML = text;
             }
         };
 
+        function send_message(){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id')
+            var xhr2 = new XMLHttpRequest();
+            message = document.getElementById("message").value;
+            xhr2.open("GET", "chat?session_id=" + session_id + "&message=" + message+"&destination="+current_name+"&add", true);
+            xhr2.send();
+            xhr2.onreadystatechange = function () {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    load_chat(current_name);
+                }
+
+            }
+        }
+
 
     </script>
 </head>
 
 <body>
-    <div id="friends">
-        <h2>Friends</h2>
-        <div id="friends_list"></div>
-    </div>
-    <div id="Chat">
-        <h2>Chat</h2>
+    <div id="friends_list"></div>
+    <div id="chat">
+        <h2 id="chat_caption">Chat</h2>
         <input type="text" id="message" name="message" placeholder="Enter message" autocomplete="off" >
         <input type="submit" value="send" onclick="send_message();">
         <br/>

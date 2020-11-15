@@ -46,14 +46,14 @@ namespace database
         {
             try
             {
-                std::cout << "initializing chat ..." << std::endl;
-                std::string query = "CREATE TABLE `chat` (`id` INT NOT NULL AUTO_INCREMENT,`time` DATETIME NOT NULL, `source_login` VARCHAR(256) NOT NULL,`destination_login` VARCHAR(256) NOT NULL,`message` VARCHAR(1024) NULL,  `readed` int NOT NULL,PRIMARY KEY (`id`),KEY `source` (`source_login`),KEY `destination` (`destination_login`));";
+                std::cout << "initializing chat: ";
+                std::string query = "CREATE TABLE IF NOT EXISTS `chat` (`id` INT NOT NULL AUTO_INCREMENT,`time` DATETIME NOT NULL, `source_login` VARCHAR(256) NOT NULL,`destination_login` VARCHAR(256) NOT NULL,`message` VARCHAR(1024) NULL,  `readed` int NOT NULL,PRIMARY KEY (`id`),KEY `source` (`source_login`),KEY `destination` (`destination_login`));";
                 database::Database_MySQL::get().execute(query);
-                std::cout << "initializing char ... done" << std::endl;
+                std::cout << "done" << std::endl;
             }
-            catch (...)
+            catch (std::exception &ex)
             {
-                std::cout << "initializing chat ... fail" << std::endl;
+                std::cout <<  ex.what() << std::endl;
             }
         }
 
