@@ -16,7 +16,7 @@
             left: 50px;
             top: 0px;
         }
-    #chat {
+    #wall {
             border: 0px solid darkgrey;
             border-radius: 5px;
             padding: 15px;
@@ -45,33 +45,36 @@
                     var length = jsObject.length;
                     var text = "<ul id='friends-list'>";
                     for (var i = 0; i < length; i++)
-                        text += "<li>" + jsObject[i] + "  <a href=\"#\" onclick=\"load_chat('" + jsObject[i] + "');\">chat</a></li>";
+                        text += "<li>" + jsObject[i] + "</li>";
+                    text += "</ul><br/><br/>"
+                    document.getElementById("friends_list").innerHTML = text;
+                    load_wall();
                 }
-                text += "</ul><br/><br/>"
-                document.getElementById("friends_list").innerHTML = text;
+                
             }
+
+            //load_wall();
         }
-        function load_chat(name) {
+        function load_wall() {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const session_id = urlParams.get('session_id')
             var xhr2 = new XMLHttpRequest();
             current_name = name;
-            document.getElementById("chat_caption").innerHTML = "Chat with "+current_name;
-            xhr2.open("GET", "chat?session_id=" + session_id + "&filter=" + name, true);
+
+            xhr2.open("GET", "wall?session_id=" + session_id, true);
             xhr2.send();
             xhr2.onreadystatechange = function () {
                 if (xhr2.readyState == 4 && xhr2.status == 200) {
                     var jsonData = xhr2.responseText;
                     var jsObject = JSON.parse(jsonData);
                     var length = jsObject.length;
-                    var text = "<ul id='chat-list'>";
+                    var text = "<ul id='wall-list'>";
                     for (var i = 0; i < length; i++)
-                        text += "<li><b>" + jsObject[i].source_login + "</b>: " + jsObject[i].time +"<br/>"+ jsObject[i].message + "<hr/></li>";
-                    text += "</ul><br/><br/>"
-                    document.getElementById("chat_list").innerHTML = text;
+                        text += "<li><b>" + jsObject[i].login + "</b>: " + jsObject[i].time +"<br/>"+ jsObject[i].message + "<hr/></li>";
                 }
-                
+                text += "</ul><br/><br/>"
+                document.getElementById("wall_list").innerHTML = text;
             }
         };
 
@@ -81,11 +84,11 @@
             const session_id = urlParams.get('session_id')
             var xhr2 = new XMLHttpRequest();
             message = document.getElementById("message").value;
-            xhr2.open("GET", "chat?session_id=" + session_id + "&message=" + message+"&destination="+current_name+"&add", true);
+            xhr2.open("GET", "wall?session_id=" + session_id + "&message=" + message+"&destination="+current_name+"&add", true);
             xhr2.send();
             xhr2.onreadystatechange = function () {
                 if (xhr2.readyState == 4 && xhr2.status == 200) {
-                    load_chat(current_name);
+                    load_wall();
                 }
 
             }
@@ -97,14 +100,14 @@
 
 <body>
     <div id="friends_list"></div>
-    <div id="chat">
-        <h2 id="chat_caption">Chat</h2>
-        <input type="text" id="message" name="message" placeholder="Enter message" autocomplete="off" >
-        <input type="submit" value="send" onclick="send_message();">
+    <div id="wall">
+        <h2 id="chat_caption">My wall</h2>
+        <input type="text" id="message" name="message" placeholder="Enter post ..." autocomplete="off" >
+        <input type="submit" value="Post" onclick="send_message();">
         <br/>
         <hr/>
         <br/>
-        <div id="chat_list"></div>
+        <div id="wall_list"></div>
     </div>
 </body>
 

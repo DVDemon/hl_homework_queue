@@ -170,6 +170,13 @@
             const session_id = urlParams.get('session_id');
             window.location = "chat.html?session_id=" + session_id;
         }
+
+        function wall() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const session_id = urlParams.get('session_id');
+            window.location = "wall.html?session_id=" + session_id;
+        }
     </script>
 </head>
 
@@ -205,6 +212,7 @@
         <br />
         <input type="submit" value="Search by name" onclick="search_by_name();">
         <input type="submit" value="Chat " onclick="chat();">
+        <input type="submit" value="Wall " onclick="wall();">
     </div>
 
 </body>
