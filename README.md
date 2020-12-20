@@ -49,8 +49,64 @@ sudo make
 
 sudo cp *.so /usr/lib
 
+## Запуск
+
+Запускаем kafka и zookeeper в docker
+
+docker/docker-compose up
+
+Запускаем сервер
+
+./server
+
+Запускаем не менее одно сервиса-обработчика для разбора очереди
+
+/kafka_server
+
+## Идея хранения 
+
+При публикации постов мы записываем основной пост в таблицу wall:
+
+CREATE TABLE `wall` (
+
+  `id` int NOT NULL AUTO_INCREMENT,
+
+  `time` datetime NOT NULL,
+
+  `login` varchar(256) NOT NULL,
+
+  `message` varchar(1024) DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+
+  KEY `login` (`login`)
+
+);
 
 
+В момент публикации поста делаем следующее:
 
-## Зависимости
+- пишем пост в таблицу wall
+
+- для каждого подписчика отправляем сообщение в kafka
+
+- сервисы, читающие очередь kafka пишут в таблицу wall_view сообщение, которые формируют стену пользователя
+
+CREATE TABLE `wallview` (
+ 
+  `id` int NOT NULL AUTO_INCREMENT,
+
+  `wall_id` int NOT NULL,
+
+  `login` varchar(256) NOT NULL,
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id_UNIQUE` (`id`),
+
+  KEY `login_ind` (`login`)
+
+);
+
+При просмотре стены выбираются записи из wall_view.
 
