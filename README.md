@@ -61,7 +61,7 @@ docker/docker-compose up
 
 Запускаем не менее одно сервиса-обработчика для разбора очереди
 
-/kafka_server
+./kafka_server
 
 ## Идея хранения 
 
