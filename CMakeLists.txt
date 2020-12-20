@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 project(hl_homework_01 C CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
 SET (WEBSERVICE_BINARY "server")
 SET (KAFKA_BINARY "kafka_server")
 
@@ -12,7 +12,7 @@ find_package(OpenSSL)
 find_package(GTest REQUIRED)
 find_package(Threads)
 find_package(ZLIB)
-find_package(LibRDKafka)
+#find_package(LibRDKafka)
 find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON Crypto NetSSL)
 find_package(Boost COMPONENTS filesystem system program_options regex REQUIRED)
 
@@ -39,7 +39,7 @@ target_link_libraries(${WEBSERVICE_BINARY} PRIVATE
                              ${Poco_LIBRARIES}
                              "libmysqlclient.a"
                              ZLIB::ZLIB
-                             ${LibRDKafka_LIBRARIES}
+                             "rdkafka++"
                              ${Boost_LIBRARIES})
 set_target_properties(${WEBSERVICE_BINARY} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${WEBSERVICE_BINARY} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
@@ -57,7 +57,7 @@ target_link_libraries(${KAFKA_BINARY} PRIVATE
                              ${Poco_LIBRARIES}
                              "libmysqlclient.a"
                              ZLIB::ZLIB
-                             ${LibRDKafka_LIBRARIES}
+                             "rdkafka++"
                              ${Boost_LIBRARIES})
 set_target_properties(${KAFKA_BINARY} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${KAFKA_BINARY} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)

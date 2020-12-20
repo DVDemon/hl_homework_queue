@@ -46,6 +46,7 @@ using Poco::Util::ServerApplication;
 #include "../database/person.h"
 #include "../database/chat.h"
 #include "../database/wall.h"
+#include "../database/wall_view.h"
 
 class HTTPWebServer : public Poco::Util::ServerApplication
 {
@@ -130,6 +131,7 @@ protected:
         database::Friends::init();
         database::Chat::init();
         database::Wall::init();
+        database::WallView::init();
 
         UNUSED(name);
         UNUSED(value);
