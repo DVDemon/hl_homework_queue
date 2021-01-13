@@ -2,25 +2,7 @@
 
 
 ## Инсталяция
-sudo apt-get install gcc
-
-sudo apt-get install g++
-
-sudo apt-get install cmake
-
-sudo apt-get install libssl-dev
-
-sudo apt-get install zlib1g-dev
-
-sudo apt-get install librdkafka-dev
-
-sudo apt-get install mysql-server
-
-sudo apt-get install mysql-client
-
-sudo apt-get install libmysqlclient-dev
-
-sudo apt-get install libboost-all-dev
+sudo apt-get install gcc g++ cmake git libssl-dev zlib1g-dev librdkafka-dev mysql-server mysql-client libmysqlclient-dev libboost-all-dev
 
 # Install poco
 

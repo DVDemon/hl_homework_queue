@@ -12,3 +12,11 @@ services:
         environment:
             KAFKA_ADVERTISED_HOST_NAME: localhost
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+    mysql-node-1:
+        image: mysql
+        container_name: mysql-node-1
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 3.14Oneer
