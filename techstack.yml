@@ -1,7 +1,8 @@
 repo_name: DVDemon/hl_homework_queue
 report_id: 127448d5b4a13567fcb2f48b99c1f8b3
+version: 0.1
 repo_type: Public
-timestamp: '2023-11-10T08:17:50+00:00'
+timestamp: '2024-01-05T08:57:53+00:00'
 requested_by: DVDemon
 provider: github
 branch: master
@@ -16,6 +17,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1049/cplusplus.png
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue
   detection_source: Repo Metadata
 - name: Cloud DB for Mysql
   description: Easily setup and manage the MySQL database service
@@ -25,6 +27,7 @@ tools:
   category: Data Stores
   sub_category: SQL Database as a Service
   image_url: https://img.stackshare.io/service/21275/default_078eb0ae2b56280a937ed073a3ba4332291f9ba8.png
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue/blob/master/docker/docker-compose.yml
   detection_source: docker/docker-compose.yml
   last_updated_by: Дзюба Дмитрий Владимирович
   last_updated_on: 2021-01-13 19:21:00.000000000 Z
@@ -37,6 +40,7 @@ tools:
   category: Data Stores
   sub_category: Message Queue
   image_url: https://img.stackshare.io/service/1063/kazUJooF_400x400.jpg
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue/blob/master/docker/docker-compose.yml
   detection_source: docker/docker-compose.yml
   last_updated_by: dvdemon
   last_updated_on: 2020-11-15 09:28:19.000000000 Z
@@ -48,6 +52,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Java Build Tools
   image_url: https://img.stackshare.io/service/2424/0UlUI_y1_400x400.jpg
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue
   detection_source: Repo Metadata
 - name: Git
   description: Fast, scalable, distributed revision control system
@@ -57,6 +62,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue
   detection_source: Repo Metadata
 - name: Zookeeper
   description: Because coordinating distributed systems is a Zoo
@@ -66,6 +72,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Open Source Service Discovery
   image_url: https://img.stackshare.io/service/1528/apache-zookeeper.png
+  detection_source_url: https://github.com/DVDemon/hl_homework_queue/blob/master/docker/docker-compose.yml
   detection_source: docker/docker-compose.yml
   last_updated_by: dvdemon
   last_updated_on: 2020-11-15 09:28:19.000000000 Z
